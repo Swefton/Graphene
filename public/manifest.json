@@ -1,0 +1,10 @@
+{
+    "manifest_version": 3,
+    "name": "Graph View",
+    "version": "1.0.0",
+    "description": "View history as a graph view",
+    "action": {
+      "default_popup": "index.html"
+    },
+    "permissions": []
+  }
