@@ -28,10 +28,14 @@ const App = () => {
   }, []);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: "100%", height: "100vh" }}>
+      <h1>Hello World</h1>
       <ForceGraph2D
         ref={fgRef}
+        backgroundColor="#1f1d2e"
         graphData={data}
+        width={400} // Set explicit width
+        height={400} // Set explicit height
         nodeAutoColorBy="id"
         linkDirectionalArrowLength={5}
         linkDirectionalArrowRelPos={1}
@@ -48,6 +52,7 @@ const App = () => {
       />
     </div>
   );
+  
 };
 
 export default App;
