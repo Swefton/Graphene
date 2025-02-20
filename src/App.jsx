@@ -34,22 +34,24 @@ const App = () => {
         ref={fgRef}
         backgroundColor="#1f1d2e"
         graphData={data}
-        width={400} // Set explicit width
-        height={400} // Set explicit height
+        width={400}
+        height={400}
         nodeAutoColorBy="id"
+        linkColor={() => "pink"}
+        linkDirectionalArrowColor={() => "pink"} // Change arrow color
         linkDirectionalArrowLength={5}
         linkDirectionalArrowRelPos={1}
         nodeLabel={(node) => node.name}
         nodeCanvasObject={(node, ctx) => {
           const label = node.name;
-          const fontSize = 12;
+          const fontSize = 8;
           ctx.font = `${fontSize}px Sans-Serif`;
-          ctx.fillStyle = "black";
+          ctx.fillStyle = "white";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(label, node.x, node.y + 10);
         }}
-      />
+      />  
     </div>
   );
   
