@@ -16,4 +16,5 @@
 html, body {
   touch-action: auto !important;
   overflow: visible !important;
+  margin: 0;
 }

@@ -19,11 +19,11 @@ const App = () => {
     <div style={{ width: "100%", height: "100vh" }}>
       <h1>Browsing Graph</h1>
       <ForceGraph2D
-        ref={fgRef}
-        backgroundColor="#1f1d2e"
         graphData={graphData}
+        height={600}
         width={400}
-        height={400}
+        backgroundColor="#1f1d2e"
+        ref={fgRef}
         nodeAutoColorBy="id"
         linkColor={() => "pink"}
         linkDirectionalArrowColor={() => "pink"}
@@ -37,7 +37,7 @@ const App = () => {
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(label, node.x, node.y + 10);
+          ctx.fillText(label, node.x, node.y);
         }}
       />
     </div>
