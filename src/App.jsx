@@ -1,44 +1,32 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D from 'react-force-graph-2d';
 
 const App = () => {
+  const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const fgRef = useRef();
 
-  const data = {
-    nodes: [
-      { id: "Node1", name: "Google" },
-      { id: "Node2", name: "YouTube" },
-      { id: "Node3", name: "Facebook" },
-      { id: "Node4", name: "Twitter" },
-      { id: "Node5", name: "LinkedIn" }
-    ],
-    links: [
-      { source: "Node1", target: "Node2" },
-      { source: "Node2", target: "Node3" },
-      { source: "Node3", target: "Node4" },
-      { source: "Node4", target: "Node5" },
-      { source: "Node5", target: "Node1" }
-    ]
-  };
-
   useEffect(() => {
-    if (fgRef.current) {
-      fgRef.current.d3Force("charge").strength(-300);
+    if (chrome.runtime?.sendMessage) {
+      chrome.runtime.sendMessage({ type: "GET_GRAPH" }, (response) => {
+        if (response) {
+          setGraphData(response);
+        }
+      });
     }
-  }, []);
+  }, []); 
 
   return (
     <div style={{ width: "100%", height: "100vh" }}>
-      <h1>Hello World</h1>
+      <h1>Browsing Graph</h1>
       <ForceGraph2D
         ref={fgRef}
         backgroundColor="#1f1d2e"
-        graphData={data}
+        graphData={graphData}
         width={400}
         height={400}
         nodeAutoColorBy="id"
         linkColor={() => "pink"}
-        linkDirectionalArrowColor={() => "pink"} // Change arrow color
+        linkDirectionalArrowColor={() => "pink"}
         linkDirectionalArrowLength={5}
         linkDirectionalArrowRelPos={1}
         nodeLabel={(node) => node.name}
@@ -51,10 +39,9 @@ const App = () => {
           ctx.textBaseline = "middle";
           ctx.fillText(label, node.x, node.y + 10);
         }}
-      />  
+      />
     </div>
   );
-  
 };
 
 export default App;
