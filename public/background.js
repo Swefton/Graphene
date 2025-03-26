@@ -17,11 +17,10 @@ class Node {
       this.isCurr = isCurr;
     }
   }
+
 // on url/tab change
 // if new tab: create edge from curr node to node with new url
 // if tab exists: create edge from curr node to node with new url
-
-
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete" && tab.url) {
       const currentUrl = tab.url;
@@ -53,4 +52,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "GET_GRAPH") {
     sendResponse(graphData);
   }
+});
+
+// Example code that generates a random graph for inspection with local storage
+// TODO: dyanmically update and sync chrome local storage
+function genRandomTree(N = 300, reverse = false) {
+  return {
+    nodes: [...Array(N).keys()].map(i => ({ id: i })),
+    links: [...Array(N).keys()]
+      .filter(id => id)
+      .map(id => ({
+        [reverse ? "target" : "source"]: id,
+        [reverse ? "source" : "target"]: Math.round(Math.random() * (id - 1))
+      }))
+  };
+}
+
+// Generate the graph and store it in Chrome local storage
+const RANDOM_EXAMPLE = genRandomTree(100); // Example: 100 nodes
+
+chrome.storage.local.set({ graph: RANDOM_EXAMPLE }, () => {
+  console.log("Graph data stored in chrome.storage.local.");
 });
