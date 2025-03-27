@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import './App.css'
 
 const App = () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
@@ -35,26 +36,13 @@ const App = () => {
   };
 
   return (
-    <div
-      style={{
-        width: "500px",
-        height: "500px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-        backgroundColor: "#1f1d2e",
-        color: "white",
-        padding: "10px",
-        boxSizing: "border-box",
-      }}
-    >
+    <div id="main">
       <h1 style={{ margin: "5px 0" }}>Browsing Graph</h1>
       <div style={{ flex: 1, width: "100%" }}>
         <ForceGraph2D
           graphData={graphData}
-          height={400} // Adjusted height to fit in the box
-          width={480} // Slightly smaller than container width
+          height={400} 
+          width={480} 
           backgroundColor="#1f1d2e"
           ref={fgRef}
           nodeAutoColorBy="id"
@@ -74,41 +62,9 @@ const App = () => {
           }}
         />
       </div>
-      <div
-      style={{
-        display: "flex",
-        gap: "10px",
-      }}>
-      <button
-        style={{
-          display: "block",
-          marginTop: "10px",
-          padding: "8px 15px",
-          backgroundColor: "#ff4081",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-        onClick={openGraphInNewTab}
-      >
-        Open Graph
-      </button>
-      <button
-        style={{
-          display: "block",
-          marginTop: "10px",
-          padding: "8px 15px",
-          backgroundColor: "#ff4081",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-        onClick={clearGraphData}
-      >
-        Clear Nodes
-      </button>
+      <div id="buttondiv">
+        <button onClick={openGraphInNewTab}> Open Graph </button>
+        <button onClick={clearGraphData}> Clear Nodes </button>
       </div>
     </div>
   );

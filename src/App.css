@@ -1,0 +1,28 @@
+#main {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1f1d2e;
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#buttondiv button {
+    display: block;
+    margin-top: 10px;
+    padding:8px 15px;
+    background-color:#ff4081;
+    color:white;
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#buttondiv {
+    display: flex;
+    gap: 10px;
+}
