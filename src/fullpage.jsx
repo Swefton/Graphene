@@ -6,13 +6,11 @@ const FullPageGraph = () => {
   const fgRef = useRef();
 
   useEffect(() => {
-    if (chrome.runtime?.sendMessage) {
-      chrome.runtime.sendMessage({ type: "GET_GRAPH" }, (response) => {
-        if (response) {
-          setGraphData(response);
-        }
-      });
-    }
+    chrome.storage.local.get("graph", (result) => {
+      if (result.graph) {
+        setGraphData(result.graph);
+      }
+    });
   }, []);
 
   return (

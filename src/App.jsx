@@ -20,6 +20,20 @@ const App = () => {
     window.open("fullpage.html", "_blank");
   };
 
+  // Function to clear graph data
+  const clearGraphData = () => {
+    chrome.runtime.sendMessage({ action: "deleteGraphData" }, () => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        return;
+      }
+
+      // Clear the local state as well
+      setGraphData({ nodes: [], links: [] });
+      console.log("Graph data cleared");
+    });
+  };
+
   return (
     <div
       style={{
@@ -60,6 +74,11 @@ const App = () => {
           }}
         />
       </div>
+      <div
+      style={{
+        display: "flex",
+        gap: "10px",
+      }}>
       <button
         style={{
           display: "block",
@@ -75,6 +94,22 @@ const App = () => {
       >
         Open Graph
       </button>
+      <button
+        style={{
+          display: "block",
+          marginTop: "10px",
+          padding: "8px 15px",
+          backgroundColor: "#ff4081",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onClick={clearGraphData}
+      >
+        Clear Nodes
+      </button>
+      </div>
     </div>
   );
 };
