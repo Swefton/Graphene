@@ -16,9 +16,11 @@ const App = () => {
 
   // TODO: open new tab with another react instance.
   // https://stackoverflow.com/questions/78044861/new-tab-on-chrome-extension-using-vitereact
+  // THIS ONE BELLOW IS HUGE, TALKS ABOUT VITE'S SINGLE PAGE ROLLUP THINGY
+  // https://stackoverflow.com/questions/65868976/how-to-build-a-multi-pages-application-by-vite2-and-vue3
   // Stackover discussion on the same issue I have
   const openGraphInNewTab = () => {
-    window.open("fullpage.html", "_blank");
+    chrome.tabs.create({ url: chrome.runtime.getURL("fullpage.html") });
   };
 
   // Function to clear graph data
