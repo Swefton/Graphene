@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D from "react-force-graph-2d";
-import './App.css'
+import './graph.css'
 
-const App = () => {
+const Graph= () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const fgRef = useRef();
 
@@ -72,4 +72,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Graph;
