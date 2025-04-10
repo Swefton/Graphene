@@ -23,3 +23,7 @@ Browser extension adapted from OpenFiche
     - load unpacked and put the generated dist folder from `npm run build`
 
 > in the future, the extension will additionally be ported to safari with the [Xcode's command line utility](https://developer.apple.com/documentation/safariservices/converting-a-web-extension-for-safari)
+
+
+
+ADD A CONTROL F FEATURE
