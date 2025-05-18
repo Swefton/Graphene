@@ -2,6 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import './graph.css'
 
+function handleNodeClick(node) {
+  if (node?.url) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const currentTab = tabs[0];
+      if (currentTab?.id) {
+        // Set the tab to the node's URL
+        chrome.tabs.update(currentTab.id, { url: node.url });
+      }
+    });
+  }
+}
+
 const Graph= () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const fgRef = useRef();
@@ -14,11 +26,6 @@ const Graph= () => {
     });
   }, []);
 
-  // TODO: open new tab with another react instance.
-  // https://stackoverflow.com/questions/78044861/new-tab-on-chrome-extension-using-vitereact
-  // THIS ONE BELLOW IS HUGE, TALKS ABOUT VITE'S SINGLE PAGE ROLLUP THINGY
-  // https://stackoverflow.com/questions/65868976/how-to-build-a-multi-pages-application-by-vite2-and-vue3
-  // Stackover discussion on the same issue I have
   const openGraphInNewTab = () => {
     chrome.tabs.create({ url: chrome.runtime.getURL("fullpage.html") });
   };
@@ -53,6 +60,7 @@ const Graph= () => {
           linkDirectionalArrowLength={5}
           linkDirectionalArrowRelPos={1}
           nodeLabel={(node) => node.name}
+          onNodeClick={handleNodeClick}
           nodeCanvasObject={(node, ctx) => {
             const label = node.name;
             const fontSize = 8;

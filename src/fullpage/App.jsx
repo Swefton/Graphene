@@ -2,6 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import './App.css'
 
+function handleNodeClick(node) {
+  if (node?.url) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const currentTab = tabs[0];
+      if (currentTab?.id) {
+        // Set the tab to the node's URL
+        chrome.tabs.update(currentTab.id, { url: node.url });
+      }
+    });
+  }
+}
+
 const Graph= () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const fgRef = useRef();
@@ -49,6 +61,7 @@ const Graph= () => {
           linkDirectionalArrowLength={5}
           linkDirectionalArrowRelPos={1}
           nodeLabel={(node) => node.name}
+          onNodeClick={handleNodeClick}
           nodeCanvasObject={(node, ctx) => {
             const label = node.name;
             const fontSize = 8;
