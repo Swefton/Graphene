@@ -18,15 +18,21 @@ function updateGraph(tabId, currentUrl, tabTitle) {
   chrome.storage.local.get(["graph"], (data) => {
     let graphData = data.graph || { nodes: [], links: [] };
 
-    // Check if node already exists, else create it
+    // Add the node if it doesn't already exist
     if (!graphData.nodes.find((node) => node.id === nodeId)) {
       graphData.nodes.push(new Node(currentUrl, tabTitle || currentUrl, tabId, true));
     }
 
-    // If the tab had a previous URL, create an edge from it to the new URL in the same tab
-    if (tabHistory[tabId] && tabHistory[tabId] !== nodeId) {
+    // Only add a link if both source and target nodes exist
+    const sourceNodeId = tabHistory[tabId];
+    if (
+      sourceNodeId &&
+      sourceNodeId !== nodeId &&
+      graphData.nodes.find((node) => node.id === sourceNodeId) &&
+      graphData.nodes.find((node) => node.id === nodeId)
+    ) {
       graphData.links.push({
-        source: tabHistory[tabId],
+        source: sourceNodeId,
         target: nodeId,
       });
     }
@@ -40,6 +46,7 @@ function updateGraph(tabId, currentUrl, tabTitle) {
     });
   });
 }
+
 
 function clearStorage() {
   let graphData = { nodes: [], links: [] };
