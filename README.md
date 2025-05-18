@@ -131,3 +131,5 @@ m @ react-force-graph-2d-B3ZqMBk3.js:94
 requestAnimationFrame
 m @ react-force-graph-2d-B3ZqMBk3.js:94
 ```
+
+Graph doesn't properly track clicks when done through fullpage.
