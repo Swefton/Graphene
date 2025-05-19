@@ -61,6 +61,7 @@ const Graph= () => {
           linkDirectionalArrowLength={5}
           linkDirectionalArrowRelPos={1}
           nodeLabel={(node) => node.name}
+          nodeVal = {10}
           onNodeClick={handleNodeClick}
           nodeCanvasObject={(node, ctx) => {
             const label = node.name;
