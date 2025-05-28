@@ -16,6 +16,7 @@ function handleNodeClick(node) {
 
 const Graph= () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
+  const [currentNodeId, setCurrentNodeId] = useState(null);
   const fgRef = useRef();
 
   // Dynamically fetch window height and width to resize the react-force-graph
@@ -27,6 +28,18 @@ const Graph= () => {
     chrome.storage.local.get("graph", (result) => {
       if (result.graph) {
         setGraphData(result.graph);
+      }
+    });
+
+    // Fetch currentNode from background
+    chrome.runtime.sendMessage({ action: "getCurrentNode" }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error("Error getting current node:", chrome.runtime.lastError.message);
+        return;
+      }
+
+      if (response?.currentNode?.id) {
+        setCurrentNodeId(response.currentNode.id);
       }
     });
   }, []);
@@ -55,7 +68,11 @@ const Graph= () => {
           height={displayHeight * 0.8}
           backgroundColor="#1f1d2e"
           ref={fgRef}
+          // nodeColor={(node) => node.isCurr ? 'red' : tabIdColorMap[node.tabId] || 'gray'}
           nodeAutoColorBy={(node) => node.tabId}
+          nodeColor={(node) =>
+            node.id === currentNodeId ? "red" : "blue" 
+          }
           linkColor={() => "pink"}
           linkDirectionalArrowColor={() => "pink"}
           linkDirectionalArrowLength={5}

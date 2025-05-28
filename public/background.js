@@ -1,13 +1,13 @@
 const tabHistory = {};
+let currentNode = null;
 
 // Define a class for Nodes
 class Node {
-  constructor(url, name, tabId, isCurr) {
+  constructor(url, name, tabId) {
     this.id = `${url}_${tabId}`; // Unique identifier based on URL and tabId
     this.url = url;
     this.name = name;
     this.tabId = tabId;
-    this.isCurr = isCurr;
   }
 }
 
@@ -20,7 +20,7 @@ function updateGraph(tabId, currentUrl, tabTitle) {
 
     // Add the node if it doesn't already exist
     if (!graphData.nodes.find((node) => node.id === nodeId)) {
-      graphData.nodes.push(new Node(currentUrl, tabTitle || currentUrl, tabId, true));
+      graphData.nodes.push(new Node(currentUrl, tabTitle || currentUrl, tabId));
     }
 
     // Only add a link if both source and target nodes exist
@@ -39,10 +39,12 @@ function updateGraph(tabId, currentUrl, tabTitle) {
 
     // Update tab history
     tabHistory[tabId] = nodeId;
+    currentNode = graphData.nodes.find((node) => node.id === nodeId);
 
     // Store updated graph in Chrome storage
     chrome.storage.local.set({ graph: graphData }, () => {
       console.log("Updated graph data stored in chrome.storage.local.");
+      console.log(currentNode.id)
     });
   });
 }
@@ -61,6 +63,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ success: true });
     return true; 
   }
+
+  if (message.action === "getCurrentNode") {
+    sendResponse({ currentNode });
+    return true;
+  }
+
 });
 
 // Listen for tab updates and handle URL changes
