@@ -55,7 +55,7 @@ const Graph= () => {
           height={displayHeight * 0.8}
           backgroundColor="#1f1d2e"
           ref={fgRef}
-          nodeAutoColorBy="id"
+          nodeAutoColorBy={(node) => node.tabId}
           linkColor={() => "pink"}
           linkDirectionalArrowColor={() => "pink"}
           linkDirectionalArrowLength={5}
@@ -63,6 +63,7 @@ const Graph= () => {
           nodeLabel={(node) => node.name}
           nodeVal = {10}
           onNodeClick={handleNodeClick}
+          nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
             const label = node.name;
             const fontSize = 8;
