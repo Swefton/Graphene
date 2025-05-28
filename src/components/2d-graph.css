@@ -1,0 +1,13 @@
+  .graph-container {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .graph-container canvas {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #ff4081;
+  }
