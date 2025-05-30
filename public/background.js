@@ -1,5 +1,6 @@
 const tabHistory = {};
 let currentNode = null;
+let currentTab = null;
 
 // Node Class 
 class Node {
@@ -57,6 +58,26 @@ function clearStorage() {
   });
 }
 
+/// Listeners for event change on browser
+// Listen for tab updates and handle URL changes
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === "complete" && tab.url) {
+    updateGraph(tabId, tab.url, tab.title);
+  }
+});
+
+// Listen for change on active tab
+chrome.tabs.onActivated.addListener((activeInfo) => {
+  console.log(activeInfo)
+
+  chrome.tabs.get(activeInfo.tabId, (tab) => {
+    console.log(tab.url + "_" + activeInfo.tabId)
+  })
+
+
+})
+
+// Listeners for calls from front end
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "deleteGraphData") {
     clearStorage();
@@ -69,11 +90,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-});
-
-// Listen for tab updates and handle URL changes
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === "complete" && tab.url) {
-    updateGraph(tabId, tab.url, tab.title);
-  }
 });
