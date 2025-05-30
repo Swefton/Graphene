@@ -1,19 +1,19 @@
 const tabHistory = {};
 let currentNode = null;
 
-// Define a class for Nodes
+// Node Class 
 class Node {
   constructor(url, name, tabId) {
-    this.id = `${url}_${tabId}`; // Unique identifier based on URL and tabId
-    this.url = url;
+    this.id = `${url}_${tabId}`; 
     this.name = name;
+    this.url = url;
     this.tabId = tabId;
   }
 }
 
 // Function to update the graph in storage
 function updateGraph(tabId, currentUrl, tabTitle) {
-  const nodeId = `${currentUrl}_${tabId}`; // Unique per tab
+  const nodeId = `${currentUrl}_${tabId}`; 
 
   chrome.storage.local.get(["graph"], (data) => {
     let graphData = data.graph || { nodes: [], links: [] };
