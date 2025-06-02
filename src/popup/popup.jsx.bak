@@ -7,27 +7,37 @@ const Popup = () => {
   const [currentNodeId, setCurrentNodeId] = useState(null);
 
   useEffect(() => {
-    // First, get the current window
-    chrome.windows.getCurrent({ populate: false }, (win) => {
-      const windowId = win.id;
+    chrome.storage.local.get("graph", (result) => {
+      if (result.graph) {
+        setGraphData(result.graph);
+      }
+    });
 
-      // Now fetch the stored data for this window from chrome.storage
-      chrome.storage.local.get("windows", (result) => {
-        const windowData = result.windows?.[windowId];
-        if (windowData && windowData.graph) {
-          setGraphData(windowData.graph);
-          if (windowData.curr?.id) {
-            setCurrentNodeId(windowData.curr.id);
-          }
-        } else {
-          console.warn(`No graph data found for window ${windowId}`);
-        }
-      });
+    chrome.runtime.sendMessage({ action: "getCurrentNode" }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error("Error getting current node:", chrome.runtime.lastError.message);
+        return;
+      }
+
+      if (response?.currentNode?.id) {
+        setCurrentNodeId(response.currentNode.id);
+      }
     });
   }, []);
 
   const openGraphInNewTab = () => {
     chrome.tabs.create({ url: chrome.runtime.getURL("fullpage.html") });
+  };
+
+  const clearGraphData = () => {
+    chrome.runtime.sendMessage({ action: "deleteGraphData" }, () => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        return;
+      }
+      setGraphData({ nodes: [], links: [] });
+      console.log("Graph data cleared");
+    });
   };
 
   return (
@@ -43,6 +53,7 @@ const Popup = () => {
       </div>
       <div id="buttondiv">
         <button onClick={openGraphInNewTab}>Open Graph</button>
+        <button onClick={clearGraphData}>Clear Nodes</button>
       </div>
     </div>
   );

@@ -6,9 +6,9 @@
 class Window {
   constructor() {
     this.graph = {nodes: [], links: []}
-    this.nodeSet = new Set()
-    this.openTabs = {}
-    this.curr = null 
+    this.nodeMap = {} // nodeId -> Node
+    this.openTabs = {} // tabId  -> Node
+    this.curr = null // node
   }
 }
 
@@ -22,55 +22,130 @@ class Node {
   }
 }
 
-function addLink(window, node) {
-  nodeSet = window.nodeSet;
-  graph = window.graph;
-  openTabs = window.openTabs;
-  curr = window.curr;
+function addLink(window, tab) {
+  const { url, title: name, id: tabId, openerTabId } = tab;
 
-  if (!nodeSet.has(node)){
-    graph.nodes.push(node)
-    nodeSet.add(node)
+  const nodeId = `${url}_${tabId}`;
+  const nodeMap = window.nodeMap;
+  const graph = window.graph;
+  const openTabs = window.openTabs;
+
+  let accessedNode;
+
+  // Add new node if not already in the graph
+  if (!nodeMap.hasOwnProperty(nodeId)) {
+    accessedNode = new Node(url, name, tabId);
+    graph.nodes.push(accessedNode);
+    nodeMap[nodeId] = accessedNode;
+  } else {
+    accessedNode = nodeMap[nodeId];
   }
 
-  sourceNodeId = openTabs[curr.tabId]
-  if (sourceNodeId !== node.id && 
-    !graph.links.find({source: node.id, target: sourceNodeId})
-  ) {
-    graph.links.push({
-      source: sourceNodeId,
-      target: node.id
-    });
+  // If there's an opener tab, try to create a link from it
+  if (openerTabId != null && openerTabId in openTabs) {
+    const sourceNode = nodeMap[openTabs[openerTabId]];
+    const targetNode = accessedNode;
+
+    // Avoid duplicate links
+    const linkExists = graph.links.some(link =>
+      link.source === sourceNode.id && link.target === targetNode.id
+    );
+
+    if (!linkExists) {
+      graph.links.push({
+        source: sourceNode.id,
+        target: targetNode.id
+      });
+    }
   }
 
-  openTabs[node.tabId] = node.id;
+  // Update openTabs and curr
+  openTabs[tabId] = nodeId;
+  if (tab.active) {
+    window.curr = accessedNode;
+  }
+  return window;
 }
 
+function updatedCurrentNode(win, tabId) {
+  const node = win.openTabs[tabId];
+  if (node) {
+    win.curr = node;
+  }
+}
+
+/// Window focus changed
 chrome.windows.onFocusChanged.addListener((windowId) => {
   console.log("Window Focus Changed")
   console.log(windowId)
+  let windowsData;
   chrome.storage.local.get(["windows"], (data) => {
-    let windowsData = data.windows || {};
+    windowsData = data.windows || {};
     if (windowId !== -1 && !(windowId in windowsData)) {
       windowsData[windowId] = new Window()
       chrome.storage.local.set({windows: windowsData})
       console.log(`Saved window ${windowId}:`);
-      console.log(windowsData[windowId])
     }
+    console.log(windowsData[windowId])
   })
 })
 
+/// Window removed
+chrome.windows.onRemoved.addListener((windowId) => {
+  console.log("Window Closed:", windowId);
+
+  chrome.storage.local.get(["windows"], (data) => {
+    let windowsData = data.windows || {};
+    if (windowId in windowsData) {
+      delete windowsData[windowId];
+      chrome.storage.local.set({ windows: windowsData }, () => {
+        console.log(`Removed window ${windowId} from storage.`);
+      });
+    }
+  });
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url) {
-    console.log("Tab Updated")
-    console.log(tabId, changeInfo, tab)
+    chrome.storage.local.get(["windows"], (data) => {
+      let windowsData = data.windows || {};
+      let win = windowsData[tab.windowId];
+
+      if (!win) {
+        win = new Window();
+        windowsData[tab.windowId] = win;
+      }
+
+      // Restore methods since deserialization strips them
+      Object.setPrototypeOf(win, Window.prototype);
+
+      const updatedWin = addLink(win, tab);
+      windowsData[tab.windowId] = updatedWin;
+
+      chrome.storage.local.set({ windows: windowsData });
+    });
   }
-})
+});
+
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
-  console.log("Tab Activated")
-  console.log(activeInfo)
-})
+  const { tabId, windowId } = activeInfo;
+
+  chrome.storage.local.get(["windows"], (data) => {
+    let windowsData = data.windows || {};
+    const win = windowsData[windowId];
+
+    if (win) {
+      // Ensure prototype is restored
+      Object.setPrototypeOf(win, Window.prototype);
+
+      updatedCurrentNode(win, tabId);
+      windowsData[windowId] = win;
+
+      chrome.storage.local.set({ windows: windowsData });
+    }
+  });
+});
 
 // Listeners for calls from front end
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
