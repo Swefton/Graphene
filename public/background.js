@@ -57,6 +57,20 @@ function addLink(window, tab) {
         target: targetNode.id
       });
     }
+  } else if (tabId in openTabs) {
+    const sourceNode = nodeMap[openTabs[tabId]]
+    const targetNode = accessedNode
+
+    const linkExists = graph.links.some(link =>
+      link.source === sourceNode.id && link.target === targetNode.id
+    );
+
+    if (!linkExists) {
+      graph.links.push({
+        source: sourceNode.id,
+        target: targetNode.id
+      });
+    }
   }
 
   // Update openTabs and curr
@@ -76,30 +90,23 @@ function updatedCurrentNode(win, tabId) {
 
 /// Window focus changed
 chrome.windows.onFocusChanged.addListener((windowId) => {
-  console.log("Window Focus Changed")
-  console.log(windowId)
   let windowsData;
   chrome.storage.local.get(["windows"], (data) => {
     windowsData = data.windows || {};
     if (windowId !== -1 && !(windowId in windowsData)) {
       windowsData[windowId] = new Window()
       chrome.storage.local.set({windows: windowsData})
-      console.log(`Saved window ${windowId}:`);
     }
-    console.log(windowsData[windowId])
   })
 })
 
 /// Window removed
 chrome.windows.onRemoved.addListener((windowId) => {
-  console.log("Window Closed:", windowId);
-
   chrome.storage.local.get(["windows"], (data) => {
     let windowsData = data.windows || {};
     if (windowId in windowsData) {
       delete windowsData[windowId];
       chrome.storage.local.set({ windows: windowsData }, () => {
-        console.log(`Removed window ${windowId} from storage.`);
       });
     }
   });
@@ -115,10 +122,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         win = new Window();
         windowsData[tab.windowId] = win;
       }
-
-      // Restore methods since deserialization strips them
-      Object.setPrototypeOf(win, Window.prototype);
-
+      
       const updatedWin = addLink(win, tab);
       windowsData[tab.windowId] = updatedWin;
 
@@ -136,12 +140,8 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     const win = windowsData[windowId];
 
     if (win) {
-      // Ensure prototype is restored
-      Object.setPrototypeOf(win, Window.prototype);
-
       updatedCurrentNode(win, tabId);
       windowsData[windowId] = win;
-
       chrome.storage.local.set({ windows: windowsData });
     }
   });
@@ -151,9 +151,16 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "deleteGraphData") {
     chrome.storage.local.clear(() => {
-      console.log("Local Storage Cleared.")
-    })
+      console.log("Local Storage Cleared.");
+    });
     sendResponse({ success: true });
     return true; 
+  }
+
+  if (message.action === "getWindowsData") {
+    chrome.storage.local.get("windows", (result) => {
+      sendResponse({ success: true, data: result.windows || null });
+    });
+    return true;
   }
 });
