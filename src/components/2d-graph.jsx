@@ -1,10 +1,35 @@
-// src/components/2d-graph.jsx
 import React, { useRef } from "react";
 import ForceGraph2D from "react-force-graph-2d";
+import * as d3 from "d3";
 import './2d-graph.css';
 
 const Simple2DGraph = ({ graphData, currentNodeId, width = 480, height = 400 }) => {
   const fgRef = useRef();
+
+  const extendedRosePineColors = [
+    "#eb6f92",
+    "#f6c177",
+    "#ebbcba",
+    "#31748f",
+    "#9ccfd8",
+    "#c4a7e7",
+    "#21202e",
+    "#403d52",
+    "#524f67",
+    "#b18fa6" 
+  ];
+
+  const colorScale = d3.scaleOrdinal(extendedRosePineColors);
+
+  const updatedGraphData = {
+    ...graphData,
+    nodes: graphData.nodes.map((node) => ({
+      ...node,
+      color: node.id === currentNodeId
+        ? "red"
+        : colorScale(node.tabId ?? "default")
+    }))
+  };
 
   const handleNodeClick = (node) => {
     if (node?.url) {
@@ -19,15 +44,11 @@ const Simple2DGraph = ({ graphData, currentNodeId, width = 480, height = 400 }) 
 
   return (
     <ForceGraph2D
-      graphData={graphData}
+      graphData={updatedGraphData}
       width={width}
       height={height}
       backgroundColor="#1f1d2e"
       ref={fgRef}
-      nodeAutoColorBy="tabId"
-      nodeColor={(node) =>
-        node.id === currentNodeId ? "red" : "blue"
-      }
       linkColor={() => "pink"}
       linkDirectionalArrowColor={() => "pink"}
       linkDirectionalArrowLength={5}
