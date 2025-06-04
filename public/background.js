@@ -7,7 +7,7 @@ class Window {
   constructor() {
     this.graph = {nodes: [], links: []}
     this.nodeMap = {} // nodeId -> Node
-    this.openTabs = {} // tabId  -> Node
+    this.openTabs = {} // tabId  -> nodeId
     this.curr = null // node
   }
 }
@@ -82,7 +82,7 @@ function addLink(window, tab) {
 }
 
 function updatedCurrentNode(win, tabId) {
-  const node = win.openTabs[tabId];
+  const node = win.nodeMap[win.openTabs[tabId]];
   if (node) {
     win.curr = node;
   }
@@ -138,7 +138,6 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.storage.local.get(["windows"], (data) => {
     let windowsData = data.windows || {};
     const win = windowsData[windowId];
-
     if (win) {
       updatedCurrentNode(win, tabId);
       windowsData[windowId] = win;
