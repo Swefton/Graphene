@@ -11,20 +11,21 @@ const Fullpage = () => {
   });
 
   useEffect(() => {
-    chrome.storage.local.get("graph", (result) => {
-      if (result.graph) {
-        setGraphData(result.graph);
-      }
-    });
+    chrome.windows.getCurrent({ populate: false }, (win) => {
+      const windowId = win.id;
 
-    chrome.runtime.sendMessage({ action: "getCurrentNode" }, (response) => {
-      if (chrome.runtime.lastError) {
-        console.error("Error getting current node:", chrome.runtime.lastError.message);
-        return;
-      }
-      if (response?.currentNode?.id) {
-        setCurrentNodeId(response.currentNode.id);
-      }
+      // Now fetch the stored data for this window from chrome.storage
+      chrome.storage.local.get("windows", (result) => {
+        const windowData = result.windows?.[windowId];
+        if (windowData && windowData.graph) {
+          setGraphData(windowData.graph);
+          if (windowData.curr?.id) {
+            setCurrentNodeId(windowData.curr.id);
+          }
+        } else {
+          console.warn(`No graph data found for window ${windowId}`);
+        }
+      });
     });
 
     // Resize listener
