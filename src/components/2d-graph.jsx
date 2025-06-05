@@ -1,10 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import * as d3 from "d3";
-import './2d-graph.css';
+import "./2d-graph.css";
 
 const Simple2DGraph = ({ graphData, currentNodeId, width = 480, height = 400 }) => {
   const fgRef = useRef();
+
+  useEffect(() => {
+    if (fgRef.current) {
+      fgRef.current.d3Force('charge').strength(-50);
+    }
+  }, []);
 
   const extendedRosePineColors = [
     "#eb6f92",
@@ -57,11 +63,23 @@ const Simple2DGraph = ({ graphData, currentNodeId, width = 480, height = 400 }) 
       nodeVal={5}
       onNodeClick={handleNodeClick}
       nodeCanvasObjectMode={() => "after"}
-      nodeCanvasObject={(node, ctx) => {
+      nodeCanvasObject={(node, ctx, globalScale) => {
         const label = node.name;
-        const fontSize = 8;
+        const fontSize = 12 / globalScale;
+
+        const fadeStart = 1.3;
+        const fadeEnd = 0.7;
+
+        const opacity =
+          globalScale > fadeStart
+            ? 1
+            : globalScale < fadeEnd
+              ? 0
+              : (globalScale - fadeEnd) / (fadeStart - fadeEnd);
+
+        if (opacity === 0) return;
         ctx.font = `${fontSize}px Sans-Serif`;
-        ctx.fillStyle = "white";
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(label, node.x, node.y);
