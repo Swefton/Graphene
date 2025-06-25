@@ -53,7 +53,7 @@ const Fullpage = () => {
 
   return (
     <div id="main">
-      <h1>Browsing Graph</h1>
+      <h1>Graphene</h1>
       <div className="graph-container-fullpage">
         <Simple2DGraph
           graphData={graphData}

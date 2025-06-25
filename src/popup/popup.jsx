@@ -32,7 +32,7 @@ const Popup = () => {
 
   return (
     <div id="main">
-      <h1 style={{ margin: "5px 0" }}>Browsing Graph</h1>
+      <h1 style={{ margin: "5px 0" }}>Graphene</h1>
       <div className="graph-container-popup">
         <Simple2DGraph
           graphData={graphData}
