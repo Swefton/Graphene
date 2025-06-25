@@ -54,12 +54,14 @@ const Fullpage = () => {
   return (
     <div id="main">
       <h1>Browsing Graph</h1>
-      <Simple2DGraph
-        graphData={graphData}
-        currentNodeId={currentNodeId}
-        width={dimensions.width}
-        height={dimensions.height * 0.8} // Or 1.0 if full screen
-      />
+      <div className="graph-container-fullpage">
+        <Simple2DGraph
+          graphData={graphData}
+          currentNodeId={currentNodeId}
+          width={dimensions.width}
+          height={dimensions.height * 0.85} // Or 1.0 if full screen
+        />
+      </div>
       <div id="buttondiv">
         <button onClick={clearGraphData}>Clear Nodes</button>
       </div>

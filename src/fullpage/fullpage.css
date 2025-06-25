@@ -1,39 +1,55 @@
 html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
-  
-  #main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #1f1d2e;
-    color: white;
-    padding: 10px;
-    box-sizing: border-box;
-    height: 100vh;
-    width: 100vw;
-  }
-  
-  h1 {
-    margin: 5px 0;
-  }
-  
-  #buttondiv {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  #buttondiv button {
-    padding: 8px 15px;
-    background-color: #ff4081;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  background-color: #121212;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+}
+
+h1 {
+  margin: 5px 0;
+  text-align: center;
+}
+
+#graph-container {
+  flex: 1; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.graph-container-fullpage {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+}
+
+#buttondiv {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#buttondiv button {
+  padding: 8px 15px;
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

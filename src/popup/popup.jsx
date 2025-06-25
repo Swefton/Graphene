@@ -33,7 +33,7 @@ const Popup = () => {
   return (
     <div id="main">
       <h1 style={{ margin: "5px 0" }}>Browsing Graph</h1>
-      <div style={{ flex: 1, width: "100%" }}>
+      <div className="graph-container-popup">
         <Simple2DGraph
           graphData={graphData}
           currentNodeId={currentNodeId}

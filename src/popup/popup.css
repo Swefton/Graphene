@@ -5,10 +5,18 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background-color: #1f1d2e;
+    background-color: #121212;
     color: white;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     box-sizing: border-box;
+}
+
+.graph-container-popup {
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 
 #buttondiv button {

@@ -12,20 +12,18 @@ const Simple2DGraph = ({ graphData, currentNodeId, width = 480, height = 400 }) 
     }
   }, []);
 
-  const extendedRosePineColors = [
-    "#eb6f92",
-    "#f6c177",
-    "#ebbcba",
-    "#31748f",
-    "#9ccfd8",
-    "#c4a7e7",
-    "#21202e",
-    "#403d52",
-    "#524f67",
-    "#b18fa6" 
+  const newColorScheme = [
+    "#003f5c",
+    "#2f4b7c",
+    "#665191",
+    "#a05195",
+    "#d45087",
+    "#f95d6a",
+    "#ff7c43",
+    "#ffa600"
   ];
 
-  const colorScale = d3.scaleOrdinal(extendedRosePineColors);
+  const colorScale = d3.scaleOrdinal(newColorScheme);
 
   const updatedGraphData = {
     ...graphData,
@@ -53,10 +51,11 @@ const Simple2DGraph = ({ graphData, currentNodeId, width = 480, height = 400 }) 
       graphData={updatedGraphData}
       width={width}
       height={height}
-      backgroundColor="#1f1d2e"
+      backgroundColor="#121212"
+      // backgroundColor="white"
       ref={fgRef}
-      linkColor={() => "pink"}
-      linkDirectionalArrowColor={() => "pink"}
+      linkColor={() => "white"}
+      linkDirectionalArrowColor={() => "white"}
       linkDirectionalArrowLength={5}
       linkDirectionalArrowRelPos={1}
       nodeLabel={(node) => node.name}
