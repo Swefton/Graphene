@@ -1,135 +1,67 @@
-# graphview
-Browser extension adapted from OpenFiche
+
+# Graphene
+
+Visualize your search history as a **directed graph**, adapted from [OpenFiche](https://github.com/swefton/openfiche).
+Graphene turns your browsing history into an interactive graph, helping you see how your searches connect and evolve.
+
+---
+
+## Features
+
+* View your search history as a **graph of connected queries**
+* Explore relationships between searches visually
+* Simple Chromium extension setup
+
+---
+
+## Screenshots
+
+### Popup View
+
+![Popup screenshot](./assets/popup.png)
+
+---
+
+## Development Setup
+
+1. **Install Node.js**
+   Download and install [Node.js](https://nodejs.org/en/download).
+
+2. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/your-username/graphene.git
+   cd graphene
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+4. **Build the extension**
+
+   ```bash
+   npm run build
+   ```
+
+   This creates a `dist/` folder with the build.
+
+5. **Load in Chromium**
+
+   * Open your Chromium-based browser (Chrome, Brave, Edge, etc.)
+   * Navigate to `chrome://extensions`
+   * Enable **Developer Mode**
+   * Click **Load Unpacked** and select the generated `dist/` folder
+
+---
+
+## Roadmap
+- Official release on the chrome webstore
+- Sync across devices
 
 
-## implementation ideas
-- [force graph package](https://github.com/vasturiano/force-graph)
+## License
 
-## names
-- graphite
-
-## development
-- Download [Node](https://nodejs.org/en/download)
-
-- clone the repository
-
-- run `npm install` in the repository
-
-- run `npm run build` to create a build of the extension
-    - this will create a dist folder with the build
-
-- go to the extension tab on your chromium browser
-    - enable developer mode
-    - load unpacked and put the generated dist folder from `npm run build`
-
-> in the future, the extension will additionally be ported to safari with the [Xcode's command line utility](https://developer.apple.com/documentation/safariservices/converting-a-web-extension-for-safari)
-
-
-
-ADD A CONTROL F FEATURE
-The bug with large graphs and dragging now has an error log, noting it here before I forget.
-```js
-background.js:39 Updated graph data stored in chrome.storage.local.
-background.js:39 Updated graph data stored in chrome.storage.local.
-background.js:39 Updated graph data stored in chrome.storage.local.
-react-force-graph-2d-B3ZqMBk3.js:67 Uncaught Error: node not found: https://www.google.com/search?q=react+force+graph+breaks+with+lots+of+nodes+and+edges&oq=react+force+graph+breaks+with+lots+of+nodes+and+edges&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDU0NjVqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8_1340240345
-    at Lg (react-force-graph-2d-B3ZqMBk3.js:67:18492)
-    at A (react-force-graph-2d-B3ZqMBk3.js:67:19233)
-    at D3.x.links (react-force-graph-2d-B3ZqMBk3.js:67:19838)
-    at X.update (react-force-graph-2d-B3ZqMBk3.js:94:11623)
-    at react-force-graph-2d-B3ZqMBk3.js:54:1311
-    at x (react-force-graph-2d-B3ZqMBk3.js:53:55302)
-    at N (react-force-graph-2d-B3ZqMBk3.js:53:55592)
-    at w (react-force-graph-2d-B3ZqMBk3.js:53:55531)
-react-force-graph-2d-B3ZqMBk3.js:67 Uncaught Error: node not found: https://www.google.com/search?q=react+force+graph+breaks+with+lots+of+nodes+and+edges&oq=react+force+graph+breaks+with+lots+of+nodes+and+edges&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDU0NjVqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8_1340240345
-    at Lg (react-force-graph-2d-B3ZqMBk3.js:67:18492)
-    at A (react-force-graph-2d-B3ZqMBk3.js:67:19233)
-    at D3.x.links (react-force-graph-2d-B3ZqMBk3.js:67:19838)
-    at X.update (react-force-graph-2d-B3ZqMBk3.js:94:11623)
-    at react-force-graph-2d-B3ZqMBk3.js:54:1311
-    at x (react-force-graph-2d-B3ZqMBk3.js:53:55302)
-    at N (react-force-graph-2d-B3ZqMBk3.js:53:55592)
-    at w (react-force-graph-2d-B3ZqMBk3.js:53:55531)
-react-force-graph-2d-B3ZqMBk3.js:67 Uncaught TypeError: Cannot create property 'vx' on string 'https://github.com/vasturiano/react-force-graph/issues/202_1340240345'
-    at x (react-force-graph-2d-B3ZqMBk3.js:67:18957)
-    at react-force-graph-2d-B3ZqMBk3.js:67:20745
-    at Map.forEach (<anonymous>)
-    at Object.A [as tick] (react-force-graph-2d-B3ZqMBk3.js:67:20725)
-    at l (react-force-graph-2d-B3ZqMBk3.js:94:6434)
-    at X.tickFrame (react-force-graph-2d-B3ZqMBk3.js:94:6177)
-    at X.<computed> [as tickFrame] (react-force-graph-2d-B3ZqMBk3.js:54:1848)
-    at m (react-force-graph-2d-B3ZqMBk3.js:94:24555)
-x @ react-force-graph-2d-B3ZqMBk3.js:67
-(anonymous) @ react-force-graph-2d-B3ZqMBk3.js:67
-A @ react-force-graph-2d-B3ZqMBk3.js:67
-l @ react-force-graph-2d-B3ZqMBk3.js:94
-tickFrame @ react-force-graph-2d-B3ZqMBk3.js:94
-X.<computed> @ react-force-graph-2d-B3ZqMBk3.js:54
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-requestAnimationFrame
-m @ react-force-graph-2d-B3ZqMBk3.js:94
-```
-
-Graph doesn't properly track clicks when done through fullpage.
+MIT License © 2025
