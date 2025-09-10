@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+/* global chrome */
+import { useEffect, useState } from "react";
 import Simple2DGraph from "../components/2d-graph"; 
 import './popup.css';
 
@@ -10,7 +11,6 @@ const Popup = () => {
     // First, get the current window
     chrome.windows.getCurrent({ populate: false }, (win) => {
       const windowId = win.id;
-
       // Now fetch the stored data for this window from chrome.storage
       chrome.storage.local.get("windows", (result) => {
         const windowData = result.windows?.[windowId];

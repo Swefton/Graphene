@@ -1,36 +1,33 @@
 #main {
     width: 500px;
-    height: 500px;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     background-color: #121212;
     color: white;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
     box-sizing: border-box;
+    gap: 20px;
 }
 
 .graph-container-popup {
     border: 2px solid white;
     display: flex;
     justify-content: center;
-    align-items: center; 
-}
-
-#buttondiv button {
-    display: block;
-    margin-top: 10px;
-    padding:8px 15px;
-    background-color:#ff4081;
-    color:white;
-    border:none;
-    border-radius: 5px;
-    cursor: pointer;
+    align-items: center;
 }
 
 #buttondiv {
     display: flex;
     gap: 10px;
+}
+
+#buttondiv button {
+    padding: 8px 16px;
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
